@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:roomie_radar/models/room_model.dart';
 import 'package:roomie_radar/services/fake_room_service.dart';
 import 'package:roomie_radar/viewmodels/room_listing_viewmodel.dart';
 import 'package:roomie_radar/views/listings/components/room_card.dart';
