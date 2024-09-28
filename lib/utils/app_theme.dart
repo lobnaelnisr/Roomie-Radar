@@ -1,76 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:roomie_radar/utils/app_colors.dart';
- 
-
-
 
 class AppThemeData {
-
   AppThemeData._();
 
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: whiteColor,
-    primaryColor: appColorPrimary,
-    primaryColorDark: appColorPrimary,
+    primaryColor: appPrimaryColor,
+    primaryColorDark: appPrimaryColor,
     hoverColor: Colors.white54,
     dividerColor: viewLineColor,
-    fontFamily: GoogleFonts.openSans().fontFamily,
     appBarTheme: const AppBarTheme(
-      //color: whiteColor,
       iconTheme: IconThemeData(color: textPrimaryColor),
       systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.dark,
-          statusBarColor: rfPrimaryColor),
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: appPrimaryColor,
+      ),
     ),
     textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.black),
-    cardTheme: const CardTheme(color: Colors.white),
-    cardColor: Colors.white,
+    cardTheme: const CardTheme(color: whiteColor),
+    cardColor: whiteColor,
     iconTheme: const IconThemeData(color: textPrimaryColor),
     bottomSheetTheme: const BottomSheetThemeData(backgroundColor: whiteColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: appPrimaryColor, // Primary button color
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(10), // Global button border radius
+        ),
+        foregroundColor: Colors.white, // Text and icon color
+      ),
+    ),
     textTheme: const TextTheme(
-      labelLarge: TextStyle(color: appColorPrimary),
+      labelLarge: TextStyle(color: appPrimaryColor),
       titleLarge: TextStyle(color: textPrimaryColor),
       titleSmall: TextStyle(color: textSecondaryColor),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    colorScheme: const ColorScheme.light(primary: appColorPrimary)
+    colorScheme: const ColorScheme.light(primary: appPrimaryColor)
         .copyWith(error: Colors.red),
   ).copyWith(
     pageTransitionsTheme: const PageTransitionsTheme(
-        builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
-          TargetPlatform.macOS: OpenUpwardsPageTransitionsBuilder(),
-        }),
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: appBackgroundColorDark,
-    highlightColor: appBackgroundColorDark,
     appBarTheme: const AppBarTheme(
-      //color: appBackgroundColorDark,
       iconTheme: IconThemeData(color: blackColor),
       systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
-          statusBarColor: rfPrimaryColor),
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: appPrimaryColor,
+      ),
     ),
     primaryColor: colorPrimaryBlack,
     dividerColor: const Color(0xFFDADADA).withOpacity(0.3),
-    primaryColorDark: colorPrimaryBlack,
     textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
-    hoverColor: Colors.black12,
-    fontFamily: GoogleFonts.openSans().fontFamily,
+    fontFamily: 'OpenSans',
     bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: appBackgroundColorDark),
-    primaryTextTheme: TextTheme(
-        titleLarge: _primaryTextStyle(color: Colors.white),
-        labelSmall: _primaryTextStyle(color: Colors.white)),
     cardTheme: const CardTheme(color: cardBackgroundBlackDark),
     cardColor: appSecondaryBackgroundColor,
     iconTheme: const IconThemeData(color: whiteColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            appPrimaryColor, // Primary button color (same in dark mode for consistency)
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(10), // Global button border radius
+        ),
+        foregroundColor: Colors.white, // Text and icon color
+      ),
+    ),
     textTheme: const TextTheme(
       labelLarge: TextStyle(color: colorPrimaryBlack),
       titleLarge: TextStyle(color: whiteColor),
@@ -83,14 +91,10 @@ class AppThemeData {
         .copyWith(error: const Color(0xFFCF6676)),
   ).copyWith(
     pageTransitionsTheme: const PageTransitionsTheme(
-        builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
-          TargetPlatform.macOS: OpenUpwardsPageTransitionsBuilder(),
-        }),
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
   );
-static TextStyle _primaryTextStyle({required Color color}) {
-  return TextStyle(color: color);
-}
 }
