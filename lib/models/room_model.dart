@@ -5,11 +5,9 @@ class RoomModel {
   final String title; // Title of the room listing
   final String description; // Detailed description of the room
   final String location; // Location of the room
-  final double price; // Price of the room
+  final String price; // Price of the room
   final List<String> features; // List of features (e.g., WiFi, AC)
-  final List<RoomReviewModel> reviews; // List of reviews for the room
-  final List<String>
-      compatibleUsers; // List of user IDs compatible with the room
+
 
   RoomModel({
     required this.id,
@@ -18,8 +16,7 @@ class RoomModel {
     required this.location,
     required this.price,
     required this.features,
-    this.reviews = const [],
-    this.compatibleUsers = const [],
+
   });
 
   // Convert room data to a map
@@ -31,8 +28,7 @@ class RoomModel {
       'location': location,
       'price': price,
       'features': features,
-      'reviews': reviews.map((review) => review.toMap()).toList(),
-      'compatibleUsers': compatibleUsers,
+
     };
   }
 
@@ -43,12 +39,9 @@ class RoomModel {
       title: map['title'],
       description: map['description'],
       location: map['location'],
-      price: map['price'],
+      price: map['price'] ,
       features: List<String>.from(map['features']),
-      reviews: List<RoomReviewModel>.from(
-        map['reviews'].map((review) => RoomReviewModel.fromMap(review)),
-      ),
-      compatibleUsers: List<String>.from(map['compatibleUsers']),
+
     );
   }
 }
