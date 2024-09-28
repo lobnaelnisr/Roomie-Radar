@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roomie_radar/firebase_options.dart';
+import 'package:roomie_radar/utils/app_theme.dart';
 import 'package:roomie_radar/views/listings/room_listing.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -17,8 +18,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: RoomListing(),
+    return  MaterialApp(
+      theme: AppThemeData.lightTheme,
+      home: const RoomListing(),
     );
   }
 }
