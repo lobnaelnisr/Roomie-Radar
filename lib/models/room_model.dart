@@ -1,5 +1,3 @@
-import 'package:roomie_radar/models/room_review_model.dart';
-
 class RoomModel {
   final String id; // Unique identifier for the room
   final String title; // Title of the room listing
