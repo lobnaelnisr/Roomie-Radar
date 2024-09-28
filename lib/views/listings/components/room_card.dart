@@ -118,7 +118,7 @@ class RoomCard extends StatelessWidget {
                       child: Chip(
                         label: Text(feature),
                         backgroundColor: appPrimaryColor.withOpacity(0.1),
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: appPrimaryColor,
                           fontWeight: FontWeight.bold,
                         ),
