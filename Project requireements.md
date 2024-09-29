@@ -36,31 +36,31 @@ The **Roommate Finder Application** is designed to help users find compatible ro
 
 ## Team Structure
 
-- **Tasneem**: Frontend Developer (Room Listings & Room Details)
-- **Amira**: Frontend Developer (Questionnaire & User Profiles)
-- **Lobna**: Backend Developer (Firebase Integration & Authentication)
-- **Ethar**: Backend Developer (Repositories & Data Sources)
-- **Yassen**: Frontend Developer (Reviews & Ratings)
-- **Mazen**: Full-Stack Developer (Integration & Testing)
+- **Tasneem**: (Room Listings & Room Details)
+- **Amira**: (Questionnaire & User Profiles)
+- **Lobna**: (Firebase Integration & Authentication)
+- **Ethar**: (Repositories & Data Sources)
+- **Yassen**: (Reviews & Ratings)
+- **Mazen**: (Integration & Testing)
 
 ---
 
 ## Task Assignments
 
-| **Feature** | **Task** | **Developer(s)** | **Description** |
-|-------------|----------|------------------|-----------------|
-| **User Authentication** | **Task 1.1**: Implement Firebase Authentication | Tasneem, Amira, Lobna | - **Tasneem**: Set up Firebase project and integrate with Flutter app.<br>- **Amira**: Implement sign-up using `firebase_auth`.<br>- **Lobna**: Implement sign-in and password recovery functionality. |
-| | **Task 1.2**: Create user profiles in Firestore | Lobna | Store user details (name, email, profile picture) in Firestore. |
-| **Room Listings** | **Task 2.1**: Implement Room List Screen | Tasneem, Ethar | - **Tasneem**: Create UI layout for listing rooms using Flutter widgets.<br>- **Ethar**: Fetch room data from Firestore and display it in a `ListView`. |
-| | **Task 2.2**: Implement Room Details Screen | Mazen, Tasneem | - **Mazen**: Create detailed room view UI.<br>- **Tasneem**: Display room info (price, location) and add a button to view reviews. |
-| **Questionnaire** | **Task 3.1**: Design Questionnaire UI | Amira, Mazen | - **Amira**: Create a list of questions using `Form` and `TextField` widgets.<br>- **Mazen**: Implement UI to collect answers. |
-| | **Task 3.2**: Implement Weighting System | Ethar | Define weights for each answer and store questionnaire results in Firestore. |
-| **Compatibility Calculation** | **Task 4.1**: Implement Compatibility Logic | Lobna | Write a function to calculate compatibility between users based on their answers. |
-| | **Task 4.2**: Store Compatibility Results | Mazen, Ethar | - **Mazen**: Save compatibility scores in Firestore.<br>- **Ethar**: Ensure the data is stored properly. |
-| **User Profiles and Reviews** | **Task 5.1**: Implement Profile Screen | Amira, Lobna | - **Amira**: Display user details (name, bio) and allow editing.<br>- **Lobna**: Fetch and display profile data from Firestore. |
-| | **Task 5.2**: Implement User Reviews Feature | Yassen, Amira | - **Yassen**: Build UI to submit reviews.<br>- **Amira**: Collaborate on displaying reviews. |
-| **Room Reviews and Ratings** | **Task 6.1**: Implement Room Review System | Yassen, Tasneem | - **Yassen**: Build UI to submit room reviews.<br>- **Tasneem**: Connect review submission with room listings. |
-| | **Task 6.2**: Display Room Ratings | Mazen, Yassen | - **Mazen**: Calculate average ratings and display them on the room details page.<br>- **Yassen**: Design the UI to show ratings. |
+| **Feature** | **Task** | **Developer(s)** | **Description** | **Deadline** |
+|-------------|----------|------------------|-----------------|--------------|
+| **User Authentication** | **Task 1.1**: Implement Firebase Authentication | Tasneem, Amira, Lobna | - **Tasneem**: Set up Firebase project and integrate with Flutter app.<br>- **Amira**: Implement sign-up using `firebase_auth`.<br>- **Lobna**: Implement sign-in and password recovery functionality. | 03/10 |
+| | **Task 1.2**: Create user profiles in Firestore | Lobna | Store user details (name, email, profile picture) in Firestore. | 04/10 |
+| **Room Listings** | **Task 2.1**: Implement Room List Screen | Tasneem, Ethar | - **Tasneem**: Create UI layout for listing rooms using Flutter widgets.<br>- **Ethar**: Fetch room data from Firestore and display it in a `ListView`. | 05/10 |
+| | **Task 2.2**: Implement Room Details Screen | Mazen, Tasneem | - **Mazen**: Create detailed room view UI.<br>- **Tasneem**: Display room info (price, location) and add a button to view reviews. | 06/10 |
+| **Questionnaire** | **Task 3.1**: Design Questionnaire UI | Amira, Mazen | - **Amira**: Create a list of questions using `Form` and `TextField` widgets.<br>- **Mazen**: Implement UI to collect answers. | 07/10 |
+| | **Task 3.2**: Implement Weighting System | Ethar | Define weights for each answer and store questionnaire results in Firestore. | 08/10 |
+| **Compatibility Calculation** | **Task 4.1**: Implement Compatibility Logic | Lobna | Write a function to calculate compatibility between users based on their answers. | 09/10 |
+| | **Task 4.2**: Store Compatibility Results | Mazen, Ethar | - **Mazen**: Save compatibility scores in Firestore.<br>- **Ethar**: Ensure the data is stored properly. | 10/10 |
+| **User Profiles and Reviews** | **Task 5.1**: Implement Profile Screen | Amira, Lobna | - **Amira**: Display user details (name, bio) and allow editing.<br>- **Lobna**: Fetch and display profile data from Firestore. | 10/10 |
+| | **Task 5.2**: Implement User Reviews Feature | Yassen, Amira | - **Yassen**: Build UI to submit reviews.<br>- **Amira**: Collaborate on displaying reviews. | 11/10 |
+| **Room Reviews and Ratings** | **Task 6.1**: Implement Room Review System | Yassen, Tasneem | - **Yassen**: Build UI to submit room reviews.<br>- **Tasneem**: Connect review submission with room listings. | 12/10 |
+| | **Task 6.2**: Display Room Ratings | Mazen, Yassen | - **Mazen**: Calculate average ratings and display them on the room details page.<br>- **Yassen**: Design the UI to show ratings. | 13/10 |
 
 ---
 
