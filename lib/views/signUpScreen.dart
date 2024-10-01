@@ -19,7 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  XFile? _imageFile; // To hold the profile picture
+  XFile? _imageFile; // To hold the profile picture(amira)
   final FirebaseAuthServices _authService = FirebaseAuthServices();
 
   @override
