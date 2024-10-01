@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:roomie_radar/firebase_options.dart';
 import 'package:roomie_radar/utils/app_theme.dart';
 import 'package:roomie_radar/views/listings/room_listing.dart';
+import 'package:roomie_radar/views/authentication/signInScreen.dart';
+import 'package:roomie_radar/views/signUpScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -20,7 +22,13 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: AppThemeData.lightTheme,
-      home: const RoomListing(),
+      //home: const RoomListing(),
+      initialRoute: '/signUp',
+      routes: {
+        '/signIn': (context) => const SignInScreen(),
+        '/signUp': (context) => const SignUpScreen(),
+        '/roomListing': (context) => const RoomListing(),
+      },
     );
   }
 }
