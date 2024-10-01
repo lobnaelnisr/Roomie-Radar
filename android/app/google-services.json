@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "269219136267",
+    "project_id": "unity-education",
+    "storage_bucket": "unity-education.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269219136267:android:b03696e40b684dfc45d80e",
+        "android_client_info": {
+          "package_name": "com.SummationWorks.roomie_radar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269219136267-3sda19iv26o5708n4l9muhbhva5632cr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzS0UBUrIUqj3GDqOOtG6nKqCsN-g4SLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269219136267-3sda19iv26o5708n4l9muhbhva5632cr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
