@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:roomie_radar/views/authentication/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
@@ -20,7 +20,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
 
   XFile? _imageFile; // To hold the profile picture(amira)
-  final FirebaseAuthServices _authService = FirebaseAuthServices();
 
   @override
   void initState() {
@@ -50,22 +49,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-  void _signUp() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true; // Set loading state
-      });
-      // Call Firebase sign-up method
-      User? user = await _authService.signUpWithEmailAndPassword(
-        _emailController.text,
-        _passwordController.text,
-      );
-      setState(() {
-        _isLoading = false; // Reset loading state
-      });
-      Navigator.pushReplacementNamed(context, '/signIn');
-    }
-  }
+  // void _signUp() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     setState(() {
+  //       _isLoading = true; // Set loading state
+  //     });
+  //     // Call Firebase sign-up method
+  //     User? user = await _authService.signUpWithEmailAndPassword(
+  //       _emailController.text,
+  //       _passwordController.text,
+  //     );
+  //     setState(() {
+  //       _isLoading = false; // Reset loading state
+  //     });
+  //     Navigator.pushReplacementNamed(context, '/signIn');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
-                          onPressed: _signUp,
+                          onPressed: (){},
                           child: const Text('Sign Up'),
                         ),
                   const SizedBox(height: 16),
