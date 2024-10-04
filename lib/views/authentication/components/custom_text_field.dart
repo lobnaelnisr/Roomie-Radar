@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roomie_radar/utils/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -28,7 +29,7 @@ class CustomTextField extends StatelessWidget {
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-        prefixIcon: Icon(icon, color: Colors.blue), // Customize icon color
+        prefixIcon: Icon(icon, color: appPrimaryColor), // Customize icon color
       ),
       validator: validator,
     );
