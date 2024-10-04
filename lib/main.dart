@@ -6,8 +6,6 @@ import 'package:roomie_radar/views/authentication/sign_in_screen.dart';
 import 'package:roomie_radar/views/authentication/sign_up_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
