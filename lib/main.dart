@@ -22,13 +22,13 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppThemeData.lightTheme,
-      //home: const RoomListing(),
-      initialRoute: '/signIn',
-      routes: {
-        '/signIn': (context) => const SignInScreen(),
-        '/signUp': (context) => const SignUpScreen(),
-        '/roomListing': (context) => const RoomListing(),
-      },
+      home: const RoomListing(),
+      // initialRoute: '/signIn',
+      // routes: {
+      //   '/signIn': (context) => const SignInScreen(),
+      //   '/signUp': (context) => const SignUpScreen(),
+      //   '/roomListing': (context) => const RoomListing(),
+      // },
     );
   }
 }

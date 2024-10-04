@@ -14,20 +14,12 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // Create an instance of the ViewModel here
-  late SignInViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = SignInViewModel(repository: FirebaseAuthService());
-    _viewModel.emailController = _emailController;
-    _viewModel.passwordController = _passwordController;
-  }
+  final SignInViewModel viewModel =
+      SignInViewModel(repository: FirebaseAuthService());
 
   @override
   void dispose() {
@@ -38,66 +30,49 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signIn() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
+      _setLoading(true);
       try {
-        UserModel? user = await _viewModel.signIn();
-        if (user != null) {
-          // Navigate to home screen
-        } else {
-          _showErrorDialog("Invalid email or password");
-        }
+        await viewModel.signIn(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+        // Navigate to home screen or other
       } catch (e) {
-        _showErrorDialog("An error occurred. Please try again later.");
+        _showDialog("An error occurred. Please try again later.",
+            isError: true);
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        _setLoading(false);
       }
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> _resetPassword() async {
     if (_emailController.text.isNotEmpty) {
       try {
-        await _viewModel.resetPassword();
-        _showSuccessDialog("Reset email sent.");
+        await viewModel.resetPassword(
+          _emailController.text.trim(),
+        );
+        _showDialog("Password reset link sent to your email.", isError: false);
       } catch (e) {
-        _showErrorDialog(e.toString());
+        _showDialog(e.toString(), isError: true);
       }
     } else {
-      _showErrorDialog("Please enter your email to reset password.");
+      _showDialog("Please enter your email to reset password.", isError: true);
     }
   }
 
-  void _showSuccessDialog(String message) {
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
+
+  void _showDialog(String message, {required bool isError}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Success"),
+          title: Text(isError ? "Error" : "Success"),
           content: Text(message),
           actions: <Widget>[
             TextButton(
@@ -125,7 +100,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const _Header(),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 40),
+                  const _Logo(), // Optional logo widget
+                  const SizedBox(height: 40),
                   _EmailAndPasswordFields(
                     emailController: _emailController,
                     passwordController: _passwordController,
@@ -157,14 +134,30 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      'Welcome to Roomie Radar!',
-      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+      'Welcome Back!',
+      style: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: appPrimaryColor,
+      ),
       textAlign: TextAlign.center,
     );
   }
 }
 
-class _EmailAndPasswordFields extends StatelessWidget {
+class _Logo extends StatelessWidget {
+  const _Logo();
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/logo.png', // Adjust the path to your logo
+      height: 120,
+    );
+  }
+}
+
+class _EmailAndPasswordFields extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
@@ -174,11 +167,18 @@ class _EmailAndPasswordFields extends StatelessWidget {
   });
 
   @override
+  _EmailAndPasswordFieldsState createState() => _EmailAndPasswordFieldsState();
+}
+
+class _EmailAndPasswordFieldsState extends State<_EmailAndPasswordFields> {
+  bool _isPasswordVisible = false;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CustomTextField(
-          controller: emailController,
+          controller: widget.emailController,
           labelText: 'Email',
           icon: Icons.email,
           validator: (value) {
@@ -193,10 +193,10 @@ class _EmailAndPasswordFields extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          controller: passwordController,
+          controller: widget.passwordController,
           labelText: 'Password',
           icon: Icons.lock,
-          obscureText: true,
+          obscureText: !_isPasswordVisible,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your password';
@@ -208,6 +208,16 @@ class _EmailAndPasswordFields extends StatelessWidget {
             }
             return null;
           },
+          suffixIcon: IconButton(
+            icon: Icon(
+              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          ),
         ),
       ],
     );
@@ -232,8 +242,10 @@ class _SignInButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(30.0),
               ),
+              backgroundColor:
+                  appPrimaryColor, // Use primary color for the button
             ),
             child: const Text('Sign In', style: TextStyle(fontSize: 16)),
           );

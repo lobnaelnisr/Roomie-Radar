@@ -30,21 +30,27 @@ class RoomCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             child: Stack(
               children: [
-                Image.network(
-                  'https://images.pexels.com/photos/1669799/pexels-photo-1669799.jpeg?cs=srgb&dl=pexels-fotoaibe-1669799.jpg&fm=jpg',
+                // Image.network(
+                //   'https://res.cloudinary.com/simpleview/image/upload/v1686072977/clients/milwaukee/VM_Hilton_Plaza_Suite_King_Room_9b5d673a-95c6-445e-ad6b-5ae85e260f18.jpg',
+                //   height: 200,
+                //   width: double.infinity,
+                //   fit: BoxFit.cover,
+                //   loadingBuilder: (context, child, loadingProgress) {
+                //     if (loadingProgress == null) return child;
+                //     return Container(
+                //       height: 200,
+                //       color: Colors.grey.shade300,
+                //       child: const Center(
+                //         child: CircularProgressIndicator(),
+                //       ),
+                //     );
+                //   },
+                // ),
+                Image.asset(
+                  'assets/room_placeholder.jpg',
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      height: 200,
-                      color: Colors.grey.shade300,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
                 ),
                 Positioned(
                   top: 10,
