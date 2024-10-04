@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final IconButton? suffixIcon;
 
   const CustomTextField({
     super.key,
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.validator,
+    this.suffixIcon,
   });
 
   @override
@@ -22,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+
       decoration: InputDecoration(
         labelText: labelText,
         border: OutlineInputBorder(
@@ -30,6 +33,7 @@ class CustomTextField extends StatelessWidget {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         prefixIcon: Icon(icon, color: appPrimaryColor), // Customize icon color
+        suffixIcon: suffixIcon,
       ),
       validator: validator,
     );
