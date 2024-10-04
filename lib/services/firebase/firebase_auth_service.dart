@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:roomie_radar/models/user_model.dart';
-import 'package:roomie_radar/repositories/user_repository.dart';
+import 'package:roomie_radar/repositories/auth_repository.dart';
 
-class FirebaseUserService extends UserRepository {
+class FirebaseAuthService extends AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -47,12 +47,22 @@ class FirebaseUserService extends UserRepository {
     await _auth.signOut();
   }
 
+  @override
   Future<UserModel?> getUserById(String id) async {
     try {
       DocumentSnapshot doc = await _firestore.collection('users').doc(id).get();
       return UserModel.fromMap(doc.data() as Map<String, dynamic>);
     } catch (e) {
       throw Exception("Error fetching user: $e");
+    }
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception("Error resetting password: $e");
     }
   }
 }
