@@ -4,7 +4,10 @@ import 'package:roomie_radar/utils/app_theme.dart';
 import 'package:roomie_radar/views/authentication/signInScreen.dart';
 import 'package:roomie_radar/views/authentication/signUpScreen.dart';
 import 'package:roomie_radar/views/listings/room_listing.dart';
-// import 'package:roomie_radar/views/auth/signInScreen.dart';
+
+import 'package:roomie_radar/views/authentication/sign_in_screen.dart';
+import 'package:roomie_radar/views/authentication/sign_up_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -30,6 +33,7 @@ class MainApp extends StatelessWidget {
         '/signUp': (context) => const SignUpScreen(),
         '/roomListing': (context) => const RoomListing(),
       },
+
     );
   }
 }
