@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:roomie_radar/models/room_model.dart';
 import 'package:roomie_radar/utils/app_colors.dart';
+import 'package:roomie_radar/views/listings/room_details.dart';
 
 class RoomCard extends StatelessWidget {
   final RoomModel room;
@@ -167,7 +168,14 @@ class RoomCard extends StatelessWidget {
                   elevation: 5,
                   shadowColor: appPrimaryColor.withOpacity(0.5),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RoomDetailsView(roomId: room.id),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.visibility, color: Colors.white),
                 label: const Text(
                   "View",
