@@ -19,17 +19,25 @@ class FirebaseAuthService extends AuthRepository {
         email: email,
         password: password,
       );
-      // Create user document in Firestore
+
+      // Upload profile picture and create user in Firestore
+      String profilePictureUrl = await updateProfilePicture(
+        userCredential.user!.uid,
+        profilePic,
+      );
+
       UserModel user = UserModel(
         id: userCredential.user!.uid,
         name: name,
         email: email,
-        profilePicture:
-            await updateProfilePicture(userCredential.user!.uid, profilePic),
+        profilePicture: profilePictureUrl,
       );
+
+      // Store user in Firestore
       await _firestore.collection('users').doc(user.id).set(user.toMap());
       return user;
     } catch (e) {
+      print("Firebase sign-up error: $e");
       throw Exception("Error signing up: $e");
     }
   }

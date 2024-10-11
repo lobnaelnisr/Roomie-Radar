@@ -42,20 +42,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
         viewModel.setLoading(true);
       });
 
-      bool success = await viewModel.signUp(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-        _nameController.text.trim(),
-      );
+      try {
+        bool success = await viewModel.signUp(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+          _nameController.text.trim(),
+        );
 
-      setState(() {
-        viewModel.setLoading(false);
-      });
-
-      if (success) {
-        Navigator.pushReplacementNamed(context, '/signIn');
-      } else {
-        _showDialog("Sign Up failed!", isError: true);
+        if (success) {
+          Navigator.pushReplacementNamed(context, '/signIn');
+        } else {
+          _showDialog("Sign Up failed! Please try again.", isError: true);
+        }
+      } catch (e) {
+        _showDialog("Error occurred during sign-up: ${e.toString()}",
+            isError: true);
+      } finally {
+        // Ensure loading stops regardless of success or failure
+        setState(() {
+          viewModel.setLoading(false);
+        });
       }
     }
   }

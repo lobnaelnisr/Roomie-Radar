@@ -33,7 +33,9 @@ class SignUpViewModel {
 
       return user != null;
     } catch (e) {
-      throw Exception("Error signing up: $e");
+      // Log error for debugging purposes
+      print("Error during sign-up: $e");
+      return false; // Return false if an error occurs
     }
   }
 
