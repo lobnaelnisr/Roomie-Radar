@@ -1,11 +1,21 @@
-class Questionnaire {
+class QuestionnaireAnswers {
   final String userId; // ID of the user taking the questionnaire
   final Map<String, dynamic> answers; // A map of question IDs to answers
-  final double compatibilityScore; // Calculated compatibility score
 
-  Questionnaire({
+  QuestionnaireAnswers({
     required this.userId,
     required this.answers,
-    this.compatibilityScore = 0.0,
   });
+
+  QuestionnaireAnswers.fromMap(Map<String, dynamic> map)
+      : userId = map['userId'],
+        answers = map['answers'];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'answers': answers,
+    };
+  }
 }
+
