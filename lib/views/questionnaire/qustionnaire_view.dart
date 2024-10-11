@@ -171,7 +171,7 @@ class _QuestionnaireViewState extends State<QuestionnaireView> {
   void _onSubmitPressed() {
     if (_areAllQuestionsAnswered()) {
       log('Selected Answers: $selectedAnswers');
-      Navigator.pushNamed(context, '/roomListing');
+      Navigator.pushReplacementNamed(context, '/roomListing');
     } else {
       _showIncompleteDialog();
     }
