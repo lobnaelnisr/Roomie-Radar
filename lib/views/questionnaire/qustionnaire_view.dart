@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:roomie_radar/viewmodels/questionnaire_viewmodel.dart';
-import 'package:roomie_radar/models/questionnaire_model.dart';
 
 class QuestionnaireView extends StatefulWidget {
   const QuestionnaireView({super.key});

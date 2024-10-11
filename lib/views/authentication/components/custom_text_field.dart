@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.validator,
-    this.suffixIcon,
+    this.suffixIcon, required TextInputType keyboardType,
   });
 
   @override

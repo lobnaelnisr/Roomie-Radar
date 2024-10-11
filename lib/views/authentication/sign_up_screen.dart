@@ -194,7 +194,7 @@ class _SignUpFields extends StatelessWidget {
               return 'Please enter your name';
             }
             return null;
-          },
+          }, keyboardType: TextInputType.name,
         ),
         const SizedBox(height: 20),
         CustomTextField(
@@ -209,7 +209,7 @@ class _SignUpFields extends StatelessWidget {
               return 'Please enter a valid email';
             }
             return null;
-          },
+          }, keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 20),
         CustomTextField(
@@ -224,7 +224,7 @@ class _SignUpFields extends StatelessWidget {
               return 'Password must be at least 8 characters';
             }
             return null;
-          },
+          }, keyboardType: TextInputType.visiblePassword,
         ),
       ],
     );

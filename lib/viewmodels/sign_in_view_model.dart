@@ -6,16 +6,28 @@ class SignInViewModel {
 
   SignInViewModel({required this.repository});
 
-  Future signIn(String email, String password) async {
-    UserModel? user = await repository.signIn(email, password);
-    if (user != null) {
-      // Navigate to home screen
-    } else {
-      throw Exception("Invalid email or password");
+  // Handles sign-in with email and password.
+  Future<UserModel?> signIn(String email, String password) async {
+    try {
+      UserModel? user = await repository.signIn(email, password);
+      if (user != null) {
+        // User successfully signed in
+        return user;
+      } else {
+        throw Exception("Invalid email or password");
+      }
+    } catch (e) {
+      // Propagate error for handling in the UI layer
+      throw Exception("Sign-in failed: ${e.toString()}");
     }
   }
 
-  Future resetPassword(String email) async {
-    await repository.resetPassword(email);
+  // Sends a password reset email.
+  Future<void> resetPassword(String email) async {
+    try {
+      await repository.resetPassword(email);
+    } catch (e) {
+      throw Exception("Error resetting password: ${e.toString()}");
+    }
   }
 }

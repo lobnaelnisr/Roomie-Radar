@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roomie_radar/services/fake/fake_room_service.dart';
+import 'package:roomie_radar/services/firebase/firebase_auth_service.dart';
 import 'package:roomie_radar/services/firebase/firebase_room_service.dart';
 import 'package:roomie_radar/viewmodels/room_listing_viewmodel.dart';
 import 'package:roomie_radar/views/listings/components/room_card.dart';
@@ -21,6 +22,15 @@ class _RoomListingState extends State<RoomListing> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Room Listing'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              FirebaseAuthService().signOut();
+              Navigator.pushReplacementNamed(context, '/signIn');
+            },
+          ),
+        ],
       ),
       body: FutureBuilder(
           future: viewModel.fetchRooms(),
@@ -31,8 +41,7 @@ class _RoomListingState extends State<RoomListing> {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.data!.isEmpty) {
               return const Center(child: Text('No rooms found.'));
-            }
-             else {
+            } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
@@ -46,4 +55,3 @@ class _RoomListingState extends State<RoomListing> {
     );
   }
 }
-

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:roomie_radar/models/user_model.dart';
 import 'package:roomie_radar/services/firebase/firebase_auth_service.dart';
 import 'package:roomie_radar/utils/app_colors.dart';
 import 'package:roomie_radar/views/authentication/components/custom_text_field.dart';
@@ -32,14 +31,16 @@ class _SignInScreenState extends State<SignInScreen> {
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
       try {
-        await viewModel.signIn(
+        final user = await viewModel.signIn(
           _emailController.text.trim(),
           _passwordController.text.trim(),
         );
-        // Navigate to home screen or other
+        if (user != null) {
+          // Navigate to home screen or other
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       } catch (e) {
-        _showDialog("An error occurred. Please try again later.",
-            isError: true);
+        _showDialog(e.toString(), isError: true);
       } finally {
         _setLoading(false);
       }
@@ -101,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   const _Header(),
                   const SizedBox(height: 40),
-                  const _Logo(), // Optional logo widget
+                  const _Logo(),
                   const SizedBox(height: 40),
                   _EmailAndPasswordFields(
                     emailController: _emailController,
@@ -133,14 +134,12 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Welcome Back!',
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-        color: appPrimaryColor,
-      ),
-      textAlign: TextAlign.center,
+    return Text(
+      "Sign In",
+      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+            color: appPrimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
     );
   }
 }
@@ -151,13 +150,14 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'assets/logo.png', // Adjust the path to your logo
-      height: 120,
+      'assets/logo.png',
+      width: 150,
+      height: 150,
     );
   }
 }
 
-class _EmailAndPasswordFields extends StatefulWidget {
+class _EmailAndPasswordFields extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
@@ -167,57 +167,34 @@ class _EmailAndPasswordFields extends StatefulWidget {
   });
 
   @override
-  _EmailAndPasswordFieldsState createState() => _EmailAndPasswordFieldsState();
-}
-
-class _EmailAndPasswordFieldsState extends State<_EmailAndPasswordFields> {
-  bool _isPasswordVisible = false;
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CustomTextField(
-          controller: widget.emailController,
-          labelText: 'Email',
-          icon: Icons.email,
+          controller: emailController,
+          labelText: "Email",
+          keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your email';
-            } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$')
-                .hasMatch(value)) {
-              return 'Please enter a valid email';
+              return "Please enter your email";
             }
             return null;
           },
+          icon: Icons.email,
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          controller: widget.passwordController,
-          labelText: 'Password',
-          icon: Icons.lock,
-          obscureText: !_isPasswordVisible,
+          controller: passwordController,
+          labelText: "Password",
+          obscureText: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your password';
-            } else if (value.length < 8 || value.length > 16) {
-              return 'Password must be 8-16 characters';
-            } else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$')
-                .hasMatch(value)) {
-              return 'Password must contain uppercase, lowercase, and a number';
+              return "Please enter your password";
             }
             return null;
           },
-          suffixIcon: IconButton(
-            icon: Icon(
-              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
-              setState(() {
-                _isPasswordVisible = !_isPasswordVisible;
-              });
-            },
-          ),
+          icon: Icons.lock,
+          keyboardType: TextInputType.visiblePassword,
         ),
       ],
     );
@@ -235,20 +212,18 @@ class _SignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : ElevatedButton(
-            onPressed: onSignIn,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+    return ElevatedButton(
+      onPressed: isLoading ? null : onSignIn,
+      child: isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
-              backgroundColor:
-                  appPrimaryColor, // Use primary color for the button
-            ),
-            child: const Text('Sign In', style: TextStyle(fontSize: 16)),
-          );
+            )
+          : const Text("Sign In"),
+    );
   }
 }
 
@@ -261,15 +236,9 @@ class _ForgotPasswordButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: onResetPassword,
-        child: const Text(
-          'Forgot Password?',
-          style: TextStyle(fontSize: 14, color: appPrimaryColor),
-        ),
-      ),
+    return TextButton(
+      onPressed: onResetPassword,
+      child: const Text("Forgot Password?"),
     );
   }
 }
@@ -281,23 +250,9 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.pushReplacementNamed(context, '/signUp');
+        Navigator.pushNamed(context, '/signUp');
       },
-      child: RichText(
-        text: const TextSpan(
-          text: "Don't have an account? ",
-          style: TextStyle(color: Colors.black),
-          children: <TextSpan>[
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: appPrimaryColor,
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: const Text("Don't have an account? Sign Up"),
     );
   }
 }
