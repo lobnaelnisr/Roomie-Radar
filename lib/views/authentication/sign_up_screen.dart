@@ -1,52 +1,117 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:roomie_radar/models/user_model.dart';
-import 'package:roomie_radar/services/firebase/firebase_auth_service.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:roomie_radar/utils/app_colors.dart';
-import 'package:roomie_radar/viewmodels/sign_up_view_model.dart';
 import 'package:roomie_radar/views/authentication/components/custom_text_field.dart';
+import 'package:roomie_radar/views/authentication/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  late SignUpViewModel _viewModel;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  XFile? _imageFile;
+  final FirebaseAuthServices _authService = FirebaseAuthServices();
 
   @override
-  void initState() {
-    super.initState();
-    _viewModel = SignUpViewModel(repository: FirebaseAuthService());
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    _imageFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {}); // Refresh UI after selecting an image
+  }
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      _setLoading(true);
+      User? user = await _authService.signUpWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
+      );
+      _setLoading(false);
+
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/signIn');
+      } else {
+        _showDialog("Sign Up failed!", isError: true);
+      }
+    }
+  }
+
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
+
+  void _showDialog(String message, {required bool isError}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(isError ? "Error" : "Success"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<SignUpViewModel>(
-      create: (_) => _viewModel,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _viewModel.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const [
-                    _Header(),
-                    SizedBox(height: 40),
-                    _Logo(), // Optional logo widget
-                    SizedBox(height: 40),
-                    _EmailAndPasswordFields(),
-                    SizedBox(height: 20),
-                    _SignUpButton(),
-                    SizedBox(height: 30),
-                    _SignInButton(),
-                  ],
-                ),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const _SignUpHeader(),
+                  const SizedBox(height: 40),
+                  _ProfileImagePicker(
+                    imageFile: _imageFile,
+                    onPickImage: _pickImage,
+                  ),
+                  const SizedBox(height: 40),
+                  _SignUpFields(
+                    nameController: _nameController,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                  ),
+                  const SizedBox(height: 20),
+                  _SignUpButton(
+                    isLoading: _isLoading,
+                    onSignUp: _signUp,
+                  ),
+                  const SizedBox(height: 20),
+                  const _SignInLink(),
+                ],
               ),
             ),
           ),
@@ -56,8 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header();
+class _SignUpHeader extends StatelessWidget {
+  const _SignUpHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -73,47 +138,87 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _Logo extends StatelessWidget {
-  const _Logo();
+class _ProfileImagePicker extends StatelessWidget {
+  final XFile? imageFile;
+  final VoidCallback onPickImage;
+
+  const _ProfileImagePicker({
+    required this.imageFile,
+    required this.onPickImage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/logo.png', // Adjust the path to your logo
-      height: 120,
+    return GestureDetector(
+      onTap: onPickImage,
+      child: CircleAvatar(
+        radius: 50,
+        backgroundColor: Colors.grey[300],
+        backgroundImage:
+            imageFile != null ? FileImage(File(imageFile!.path)) : null,
+        child: imageFile == null
+            ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
+            : null,
+      ),
     );
   }
 }
 
-class _EmailAndPasswordFields extends StatelessWidget {
-  const _EmailAndPasswordFields();
+class _SignUpFields extends StatelessWidget {
+  final TextEditingController nameController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+
+  const _SignUpFields({
+    required this.nameController,
+    required this.emailController,
+    required this.passwordController,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<SignUpViewModel>(context);
     return Column(
       children: [
         CustomTextField(
-          controller: viewModel.emailController,
-          labelText: 'Email',
-          icon: Icons.email,
-          validator: viewModel.validateEmail,
+          controller: nameController,
+          labelText: 'Name',
+          icon: Icons.person,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your name';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          controller: viewModel.passwordController,
+          controller: emailController,
+          labelText: 'Email',
+          icon: Icons.email,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your email';
+            } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$')
+                .hasMatch(value)) {
+              return 'Please enter a valid email';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: passwordController,
           labelText: 'Password',
           icon: Icons.lock,
           obscureText: true,
-          validator: viewModel.validatePassword,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: viewModel.confirmPasswordController,
-          labelText: 'Confirm Password',
-          icon: Icons.lock,
-          obscureText: true,
-          validator: viewModel.validateConfirmPassword,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your password';
+            } else if (value.length < 8) {
+              return 'Password must be at least 8 characters';
+            }
+            return null;
+          },
         ),
       ],
     );
@@ -121,68 +226,34 @@ class _EmailAndPasswordFields extends StatelessWidget {
 }
 
 class _SignUpButton extends StatelessWidget {
-  const _SignUpButton();
+  final bool isLoading;
+  final VoidCallback onSignUp;
+
+  const _SignUpButton({
+    required this.isLoading,
+    required this.onSignUp,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SignUpViewModel>(
-      builder: (context, viewModel, child) {
-        return viewModel.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : ElevatedButton(
-                onPressed: () async {
-                  if (viewModel.formKey.currentState!.validate()) {
-                    try {
-                      UserModel? user = await viewModel.signUp();
-                      if (user != null) {
-                        // Navigate to home screen
-                      } else {
-                        _showErrorDialog(context, "Sign-up failed");
-                      }
-                    } catch (e) {
-                      _showErrorDialog(
-                          context, "An error occurred. Please try again.");
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(30.0), // Rounded corners
-                  ),
-                  backgroundColor:
-                      appPrimaryColor, // Primary color for the button
-                ),
-                child: const Text('Sign Up', style: TextStyle(fontSize: 16)),
-              );
-      },
-    );
-  }
-
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : ElevatedButton(
+            onPressed: onSignUp,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              backgroundColor: appPrimaryColor,
             ),
-          ],
-        );
-      },
-    );
+            child: const Text('Sign Up', style: TextStyle(fontSize: 16)),
+          );
   }
 }
 
-class _SignInButton extends StatelessWidget {
-  const _SignInButton();
+class _SignInLink extends StatelessWidget {
+  const _SignInLink();
 
   @override
   Widget build(BuildContext context) {
@@ -192,13 +263,15 @@ class _SignInButton extends StatelessWidget {
       },
       child: RichText(
         text: const TextSpan(
-          text: "Already have an account? ",
+          text: 'Already have an account? ',
           style: TextStyle(color: Colors.black),
-          children: <TextSpan>[
+          children: [
             TextSpan(
               text: 'Sign In',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: appPrimaryColor),
+                fontWeight: FontWeight.bold,
+                color: appPrimaryColor,
+              ),
             ),
           ],
         ),
