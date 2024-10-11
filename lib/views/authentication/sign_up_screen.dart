@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:roomie_radar/services/firebase/firebase_auth_service.dart';
 import 'package:roomie_radar/utils/app_colors.dart';
 import 'package:roomie_radar/views/authentication/components/custom_text_field.dart';
-import 'package:roomie_radar/views/authentication/firebase_auth.dart';
+import 'package:roomie_radar/viewmodels/sign_up_view_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -19,9 +19,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false;
-  XFile? _imageFile;
-  final FirebaseAuthServices _authService = FirebaseAuthServices();
+
+  final SignUpViewModel viewModel =
+      SignUpViewModel(repository: FirebaseAuthService());
 
   @override
   void dispose() {
@@ -32,32 +32,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    _imageFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {}); // Refresh UI after selecting an image
+    await viewModel.pickImage();
+    setState(() {}); // Refresh UI after image selection
   }
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
-      _setLoading(true);
-      User? user = await _authService.signUpWithEmailAndPassword(
-        _emailController.text,
-        _passwordController.text,
-      );
-      _setLoading(false);
+      setState(() {
+        viewModel.setLoading(true);
+      });
 
-      if (user != null) {
+      bool success = await viewModel.signUp(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+        _nameController.text.trim(),
+      );
+
+      setState(() {
+        viewModel.setLoading(false);
+      });
+
+      if (success) {
         Navigator.pushReplacementNamed(context, '/signIn');
       } else {
         _showDialog("Sign Up failed!", isError: true);
       }
     }
-  }
-
-  void _setLoading(bool value) {
-    setState(() {
-      _isLoading = value;
-    });
   }
 
   void _showDialog(String message, {required bool isError}) {
@@ -95,7 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const _SignUpHeader(),
                   const SizedBox(height: 40),
                   _ProfileImagePicker(
-                    imageFile: _imageFile,
+                    imageFile: viewModel.imageFile,
                     onPickImage: _pickImage,
                   ),
                   const SizedBox(height: 40),
@@ -106,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 20),
                   _SignUpButton(
-                    isLoading: _isLoading,
+                    isLoading: viewModel.isLoading,
                     onSignUp: _signUp,
                   ),
                   const SizedBox(height: 20),

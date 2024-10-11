@@ -1,27 +1,43 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:roomie_radar/models/user_model.dart';
 import 'package:roomie_radar/repositories/auth_repository.dart';
 
 class SignUpViewModel {
   final AuthRepository repository;
+  bool isLoading = false;
+  XFile? imageFile;
+
   SignUpViewModel({
     required this.repository,
   });
 
-  Future<bool> signUp(
-      String email, String password, String name, File profilePic) async {
-    UserModel? user =
-        await repository.signUp(email, password, name, profilePic);
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    imageFile = await picker.pickImage(source: ImageSource.gallery);
+  }
+
+  Future<bool> signUp(String email, String password, String name) async {
+    if (imageFile == null) {
+      throw Exception("Profile picture is required.");
+    }
 
     try {
-      if (user != null) {
-        return true;
-      } else {
-        return false;
-      }
+      UserModel? user = await repository.signUp(
+        email,
+        password,
+        name,
+        File(imageFile!.path),
+      );
+
+      return user != null;
     } catch (e) {
       throw Exception("Error signing up: $e");
     }
+  }
+
+  void setLoading(bool value) {
+    isLoading = value;
   }
 }
