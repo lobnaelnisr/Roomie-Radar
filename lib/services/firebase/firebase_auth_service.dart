@@ -94,4 +94,14 @@ class FirebaseAuthService extends AuthRepository {
       throw Exception("Error updating profile picture: $e");
     }
   }
+
+  // Implement the updateUserProfile method
+  @override
+  Future<void> updateUser(UserModel user) async {
+    try {
+      await _firestore.collection('users').doc(user.id).update(user.toMap());
+    } catch (e) {
+      throw Exception("Error updating user profile: $e");
+    }
+  }
 }

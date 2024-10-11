@@ -2,10 +2,21 @@ import 'dart:developer';
 
 import '../views/questionnaire/components/question_view.dart';
 
+import '../models/questionnaire_model.dart';
+
 class QuestionnaireViewModel {
   var introductionText =
       'Welcome to our Roommie Radar! This short survey will help us understand your preferences and find the perfect roommate match for you. Answer the questions honestly to maximize your chances of finding a compatible living partner! And finally GoodLuck!';
+  
+  // This method will store user responses
+  void submitAnswers(String userId, Map<int, String> selectedAnswers) {
+    final answers = selectedAnswers.map((key, value) => MapEntry(key.toString(), value));
+    final questionnaireAnswers = QuestionnaireAnswers(userId: userId, answers: answers);
 
+    // Here you can save the answers to Firebase or any other service
+    log('User ID: $userId, Answers: ${questionnaireAnswers.toMap()}');
+  }
+  
   //list of questions
   List<Question> getQuestions() {
     return [

@@ -8,6 +8,8 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final IconButton? suffixIcon;
+  final TextInputType keyboardType; // Make keyboardType a member variable
+  final int maxLines; // Make maxLines a member variable
 
   const CustomTextField({
     super.key,
@@ -16,7 +18,9 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.validator,
-    this.suffixIcon, required TextInputType keyboardType,
+    this.suffixIcon,
+    this.keyboardType = TextInputType.text, // Provide a default value
+    this.maxLines = 1, // Provide a default value
   });
 
   @override
@@ -24,15 +28,15 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-
+      keyboardType: keyboardType, // Use keyboardType here
+      maxLines: maxLines, // Use maxLines here
       decoration: InputDecoration(
         labelText: labelText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-        prefixIcon: Icon(icon, color: appPrimaryColor), // Customize icon color
+        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        prefixIcon: Icon(icon, color: appPrimaryColor),
         suffixIcon: suffixIcon,
       ),
       validator: validator,

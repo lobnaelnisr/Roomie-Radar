@@ -7,12 +7,14 @@ class UserModel {
   final String profilePicture; // URL of the user's profile picture
   final List<RoomReviewModel> reviews; // List of reviews given by the user
   final List<String> likedRooms; // List of room IDs the user likes
+  final String bio; // User's bio
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
     required this.profilePicture,
+    this.bio = '',
     this.reviews = const [],
     this.likedRooms = const [],
   });
@@ -24,6 +26,7 @@ class UserModel {
       'name': name,
       'email': email,
       'profilePicture': profilePicture,
+      'bio': bio, 
       'reviews': reviews.map((review) => review.toMap()).toList(),
       'likedRooms': likedRooms,
     };
@@ -36,6 +39,7 @@ class UserModel {
       name: map['name'],
       email: map['email'],
       profilePicture: map['profilePicture'],
+      bio: map['bio'] ?? '', // Include bio in the fromMap method
       reviews: List<RoomReviewModel>.from(
         map['reviews'].map((review) => RoomReviewModel.fromMap(review)),
       ),

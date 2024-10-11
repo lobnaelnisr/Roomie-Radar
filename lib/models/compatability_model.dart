@@ -8,4 +8,12 @@ class Compatibility {
     required this.user2Id,
     required this.percentage,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user1Id': user1Id,
+      'user2Id': user2Id,
+      'percentage': percentage,
+    };
+  }
 }

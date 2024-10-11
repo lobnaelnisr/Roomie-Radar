@@ -6,7 +6,9 @@ import 'package:roomie_radar/views/listings/room_listing.dart';
 import 'package:roomie_radar/views/authentication/sign_in_screen.dart';
 import 'package:roomie_radar/views/authentication/sign_up_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:roomie_radar/views/profiles/user_profile_view.dart';
 import 'package:roomie_radar/views/questionnaire/qustionnaire_view.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +36,10 @@ class MainApp extends StatelessWidget {
         '/signUp': (context) => const SignUpScreen(),
         '/Questionnaire': (context) => const QuestionnaireView(),
         '/roomListing': (context) => const RoomListing(),
+        '/profile': (context) => const UserProfileView(),
       },
     );
   }
 }
+
+
