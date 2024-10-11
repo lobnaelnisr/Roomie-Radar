@@ -142,6 +142,7 @@ class _QuestionnaireViewState extends State<QuestionnaireView> {
         ),
         onPressed: () {
           log('Selected Answers: $selectedAnswers');
+          Navigator.pushNamed(context, '/roomListing');
         },
         child: const Text(
           'Submit',
