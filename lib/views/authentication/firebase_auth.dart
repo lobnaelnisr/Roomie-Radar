@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthServices {
@@ -12,7 +14,7 @@ class FirebaseAuthServices {
       );
       return credential.user;
     } catch (e) {
-      print('Failed to create an account! Error: $e');
+      log('Failed to create an account! Error: $e');
       return null;
     }
   }
@@ -26,7 +28,7 @@ class FirebaseAuthServices {
       );
       return credential.user;
     } catch (e) {
-      print('Signing in failed! Error: $e');
+      log('Signing in failed! Error: $e');
       return null;
     }
   }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +38,7 @@ class FirebaseAuthService extends AuthRepository {
       await _firestore.collection('users').doc(user.id).set(user.toMap());
       return user;
     } catch (e) {
-      print("Firebase sign-up error: $e");
+      log("Firebase sign-up error: $e");
       throw Exception("Error signing up: $e");
     }
   }

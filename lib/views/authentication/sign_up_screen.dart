@@ -49,8 +49,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _nameController.text.trim(),
         );
 
-        if (success) {
-          Navigator.pushReplacementNamed(context, '/signIn');
+        if (success && mounted) {
+          Navigator.pushReplacementNamed(context, '/Questionnaire');
         } else {
           _showDialog("Sign Up failed! Please try again.", isError: true);
         }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
@@ -34,7 +35,7 @@ class SignUpViewModel {
       return user != null;
     } catch (e) {
       // Log error for debugging purposes
-      print("Error during sign-up: $e");
+      log("Error during sign-up: $e");
       return false; // Return false if an error occurs
     }
   }

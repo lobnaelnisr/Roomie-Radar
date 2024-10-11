@@ -37,7 +37,9 @@ class _SignInScreenState extends State<SignInScreen> {
         );
         if (user != null) {
           // Navigate to home screen or other
-          Navigator.pushReplacementNamed(context, '/roomListing');
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, '/roomListing');
+          }
         }
       } catch (e) {
         _showDialog(e.toString(), isError: true);
